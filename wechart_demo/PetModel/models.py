@@ -16,21 +16,21 @@ class UserInfo(models.Model):
   image = models.ImageField(verbose_name='UserImage', null=True, upload_to='usrimg/')
 
 class PetType(models.Model):
-  type = models.IntegerField(primary_key=True)
+  type = models.IntegerField(primary_key=True, unique=True)
   typeName = models.CharField(max_length=128)
 
 class PetInfo(models.Model):
   #name = models.CharField(max_length=128)  #name
-  type = models.IntegerField(to=PetType, to_field='type', on_delete=models.DO_NOTHING)  #type
-  variety = models.CharField(max_length=128)
+  type = models.ForeignKey(to=PetType, to_field='type', on_delete=models.DO_NOTHING)  #type
+  variety = models.CharField(max_length=128, unique=True)
   image1 = models.ImageField(verbose_name='PetTypeImage', null=True, upload_to='pettypeimg/')
   class Meta:
     unique_together=("type", "variety")
 
 class PetStatus(models.Model):
-  petId = models.BigIntegerField(primary_key=True)
-  type = models.IntegerField(to=PetType, to_field='type', on_delete=models.DO_NOTHING)
-  variety = models.CharField(max_length=128)
+  petId = models.BigIntegerField(primary_key=True, unique=True)
+  type = models.ForeignKey(to=PetType, to_field='type', on_delete=models.DO_NOTHING)
+  variety = models.ForeignKey(to=PetInfo, to_field='variety', on_delete=models.DO_NOTHING)
   name = models.CharField(max_length=128)
   image = models.ImageField(verbose_name="PetImage", null=True, upload_to='petimage/')
   grow = models.IntegerField()
@@ -40,7 +40,7 @@ class PetStatus(models.Model):
   healthy = models.IntegerField()
 
 class PetTask(models.Model):
-  taskId = models.BigIntegerField(primary_key=True)
+  taskId = models.BigIntegerField(primary_key=True, unique=True)
   text = models.CharField(max_length=128)
   petId = models.ForeignKey(to=PetStatus,to_field='petId', on_delete=models.DO_NOTHING)
   isFinish = models.BooleanField()
@@ -49,7 +49,7 @@ class PetTask(models.Model):
   growValue = models.IntegerField()
 
 class ValuableBook(models.Model):
-  dictId = models.BigIntegerField(primary_key=True)
+  dictId = models.BigIntegerField(primary_key=True, unique=True)
   likedNum = models.IntegerField()
   commentNum = models.IntegerField()
   forwardNum = models.IntegerField()
@@ -59,7 +59,7 @@ class ValuableBook(models.Model):
   video = models.CharField(max_length=256)  #save video path
 
 class CommentToDict(models.Model):
-  commentId = models.BigIntegerField(primary_key=True)
+  commentId = models.BigIntegerField(primary_key=True, unique=True)
   totalAgree = models.IntegerField()
   comment = models.CharField(max_length=1024)
   date = models.DateTimeField()
@@ -71,20 +71,20 @@ class UserToPet(models.Model):
     unique_together=("userId", "petId")
 
 class FriendRelation(models.Model):
-  userId1 = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.DO_NOTHING)
-  userId2 = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.DO_NOTHING)
+  userId1 = models.ForeignKey(to=UserInfo, to_field='account',related_name='userId1', on_delete=models.DO_NOTHING)
+  userId2 = models.ForeignKey(to=UserInfo, to_field='account',related_name='userId2', on_delete=models.DO_NOTHING)
   class Meta:
     unique_together=("userId1", "userId2")
 
 class DictPetRelation(models.Model):
-  petType = models.ForeignKey(to=PetInfo,to_field='type', on_delete=models.DO_NOTHING)
+  petType = models.ForeignKey(to=PetType, to_field='type', on_delete=models.DO_NOTHING)
   variety = models.ForeignKey(to=PetInfo,to_field='variety', on_delete=models.DO_NOTHING)
   valuableBook = models.ForeignKey(to=ValuableBook,to_field='dictId', on_delete=models.DO_NOTHING)
   class Meta:
     unique_together=("petType","variety","valuableBook") 
 
 class PetTypePetRelation(models.Model):
-  petType = models.ForeignKey(to=PetInfo,to_field='type', on_delete=models.DO_NOTHING)
+  petType = models.ForeignKey(to=PetType,to_field='type', on_delete=models.DO_NOTHING)
   variety = models.ForeignKey(to=PetInfo,to_field='variety', on_delete=models.DO_NOTHING)
   petId = models.ForeignKey(to=PetStatus,to_field='petId', on_delete=models.DO_NOTHING)
   class Meta:
