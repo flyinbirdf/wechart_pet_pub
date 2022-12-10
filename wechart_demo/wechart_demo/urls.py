@@ -20,5 +20,19 @@ from . import views,petdb
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.hello),
-    path('petdb/', petdb.testdb),
+    path('adduser/', petdb.adduser),
+    path('adddict/', petdb.adddict),
+    path('addfriend/', petdb.addfriend),
+    path('adddictcomment/', petdb.adddictcomment),
+    path('addpet/', petdb.addpet),
+    path('changepetstatus/', petdb.changepetstatus),
+    path('changedictstatus/', petdb.changedictstatus),
+    path('changedictcommentstatus/', petdb.changedictcommentstatus),
+    path('login/', petdb.login),
+    path('getdict/', petdb.getdict),
+    path('getdictcomment/', petdb.getdictcomment),
+    path('getfriend/', petdb.getfriend),
+    path('getpetstatus/', petdb.getpetstatus),
+    path('getuserinfo/', petdb.getuserinfo),
+    
 ]

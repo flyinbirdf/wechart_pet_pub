@@ -28,7 +28,8 @@ class PetInfo(models.Model):
     unique_together=("type", "variety")
 
 class PetStatus(models.Model):
-  petId = models.BigIntegerField(primary_key=True, unique=True)
+  petId = models.IntegerField(primary_key=True, unique=True)
+  userId = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.CASCADE)
   type = models.ForeignKey(to=PetType, to_field='type', on_delete=models.DO_NOTHING)
   variety = models.ForeignKey(to=PetInfo, to_field='variety', on_delete=models.DO_NOTHING)
   name = models.CharField(max_length=128)
@@ -59,17 +60,20 @@ class ValuableBook(models.Model):
   video = models.CharField(max_length=256)  #save video path
 
 class CommentToDict(models.Model):
-  commentId = models.BigIntegerField(primary_key=True, unique=True)
+  dictId = models.ForeignKey(to=ValuableBook,to_field='dictId', on_delete=models.DO_NOTHING)
+  commentId = models.IntegerField(primary_key=True, unique=True)
   totalAgree = models.IntegerField()
   comment = models.CharField(max_length=1024)
   date = models.DateTimeField()
-
+  class Meta:
+    unique_together=("dictId", "commentId")
+'''
 class UserToPet(models.Model):
   userId = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.DO_NOTHING)
   petId = models.ForeignKey(to=PetStatus, to_field='petId', on_delete=models.DO_NOTHING)
   class Meta:
     unique_together=("userId", "petId")
-
+'''
 class FriendRelation(models.Model):
   userId1 = models.ForeignKey(to=UserInfo, to_field='account',related_name='userId1', on_delete=models.DO_NOTHING)
   userId2 = models.ForeignKey(to=UserInfo, to_field='account',related_name='userId2', on_delete=models.DO_NOTHING)
@@ -89,9 +93,10 @@ class PetTypePetRelation(models.Model):
   petId = models.ForeignKey(to=PetStatus,to_field='petId', on_delete=models.DO_NOTHING)
   class Meta:
     unique_together=("petType","variety","petId")
-
+'''
 class DictCommentRelation(models.Model):
   dictId = models.ForeignKey(to=ValuableBook,to_field='dictId', on_delete=models.DO_NOTHING)
   commentId = models.ForeignKey(to=CommentToDict,to_field='commentId', on_delete=models.DO_NOTHING)
   class Meta:
     unique_together=("dictId","commentId") 
+'''
