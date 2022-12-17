@@ -56,8 +56,11 @@ class ValuableBook(models.Model):
   forwardNum = models.IntegerField()
   name = models.CharField(max_length=128) #save dict name
   text = models.CharField(max_length=1024) #save dict text
-  authorId = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.DO_NOTHING) 
-  video = models.CharField(max_length=256)  #save video path
+  authorId = models.ForeignKey(to=UserInfo, to_field='account', on_delete=models.DO_NOTHING)
+  image = models.ImageField(verbose_name="PetImage", null=True, upload_to='dictimage/')
+  #video = models.CharField(max_length=256)  #save video path
+  class Meta:
+    get_latest_by = 'dictId'
 
 class CommentToDict(models.Model):
   dictId = models.ForeignKey(to=ValuableBook,to_field='dictId', on_delete=models.DO_NOTHING)
