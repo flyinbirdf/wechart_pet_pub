@@ -34,5 +34,6 @@ urlpatterns = [
     path('getfriend/', petdb.getfriend),
     path('getpetstatus/', petdb.getpetstatus),
     path('getuserinfo/', petdb.getuserinfo),
-    
+    path('addpetinfo/', petdb.addpetinfo),
+    path('getpetinfo/', petdb.getpetinfo),
 ]
